@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://amitsamal3260:030k9fgcNV6KC28P@my-panel.lohzxez.mongodb.net/?retryWrites=true&w=majority&appName=my-panel")
+mongoose.connect(process.env.MONGO_DB_URI )
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Error connecting to MongoDB:', err));
 
