@@ -4,6 +4,8 @@ const port = 8000;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const blogsRouter = require('./routes/blog.js');
+require('dotenv').config();
+
 
 const app = express();
 app.use(bodyParser.json());

@@ -4,7 +4,6 @@ const multer = require('multer'); // Import Multer for handling file uploads
 const path = require('path');
 const fs = require('fs'); // Import fs module for file operations
 const Blog = require('../models/blog');
-const { createReadStream, createWriteStream } = require('fs');
 
 // Set up Multer storage configuration
 const storage = multer.diskStorage({
@@ -20,26 +19,6 @@ const storage = multer.diskStorage({
 // Set up Multer upload configuration
 const upload = multer({ storage: storage });
 
-
-// Modify your serverless function to handle file uploads
-module.exports = upload.single('image'), async (req, res) => {
-    // Access the uploaded file from the /tmp directory
-    const uploadedFile = req.file;
-
-    // Perform any necessary processing or validation on the file data
-    if (!uploadedFile) {
-        return res.status(400).json({ error: 'No file uploaded' });
-    }
-
-    // Example: Copy the uploaded file to a more permanent storage location
-    const permanentStoragePath = '/path/to/permanent/storage/' + uploadedFile.filename;
-    const readStream = createReadStream(uploadedFile.path);
-    const writeStream = createWriteStream(permanentStoragePath);
-    readStream.pipe(writeStream);
-
-    // Send a response back to the client indicating the status of the file upload
-    res.status(200).json({ message: 'File uploaded successfully', imageUrl: permanentStoragePath });
-};
 
 // Get all blogs
 router.get('/blogs', async (req, res) => {
