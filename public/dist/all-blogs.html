@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>All Blogs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
+      rel="stylesheet"
+    />
+    <link
+      type="text/css"
+      href="../dist/assets/css/styles.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+      crossorigin="anonymous"
+    ></script>
+    /* Add your custom CSS styles here */
+    <style>
+      .blog-card {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        width: calc(
+          33.33% - 20px
+        ); /* Adjust the width as needed for 3 cards in a row */
+        margin: 10px; /* Add margin between cards */
+      }
+
+      @media (max-width: 768px) {
+        .blog-card {
+          width: calc(
+            50% - 20px
+          ); /* Adjust the width as needed for 2 cards in a row on smaller screens */
+        }
+      }
+
+      @media (max-width: 576px) {
+        .blog-card {
+          width: calc(100% - 20px); /* Full width on extra small screens */
+        }
+      }
+
+      .blog-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .blog-image {
+        width: 100%;
+        height: 250px; /* Adjust the height as needed */
+        object-fit: cover;
+      }
+
+      .blog-content {
+        padding: 20px;
+      }
+
+      .blog-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      .blog-text {
+        font-size: 1rem;
+        color: #666;
+      }
+
+      .btn-edit {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        margin-right: 10px;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-edit:hover {
+        background-color: #0056b3;
+      }
+
+      .btn-delete {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-delete:hover {
+        background-color: #c82333;
+      }
+    </style>
+  </head>
+  <body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+      <!-- Navbar Brand-->
+      <a class="navbar-brand ps-3" href="index.html">Admin</a>
+      <!-- Sidebar Toggle-->
+      <button
+        class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
+        id="sidebarToggle"
+        href="#!"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+      <!-- Navbar Search-->
+      <form
+        class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"
+      >
+        <div class="input-group">
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Search for..."
+            aria-label="Search for..."
+            aria-describedby="btnNavbarSearch"
+          />
+          <button class="btn btn-primary" id="btnNavbarSearch" type="button">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </form>
+      <!-- Navbar-->
+      <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            id="navbarDropdown"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            ><i class="fas fa-user fa-fw"></i
+          ></a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="navbarDropdown"
+          >
+            <li><a class="dropdown-item" href="#!">Settings</a></li>
+            <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="#!">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <div id="layoutSidenav">
+      <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+          <div class="sb-sidenav-menu">
+            <div class="nav">
+              <div class="sb-sidenav-menu-heading">Core</div>
+              <a class="nav-link" href="/admin">
+                <div class="sb-nav-link-icon">
+                  <i class="fas fa-tachometer-alt"></i>
+                </div>
+                Dashboard
+              </a>
+              <div class="sb-sidenav-menu-heading">Interface</div>
+              <a
+                class="nav-link collapsed"
+                href="#"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseLayouts"
+                aria-expanded="false"
+                aria-controls="collapseLayouts"
+              >
+                <div class="sb-nav-link-icon">
+                  <i class="fas fa-columns"></i>
+                </div>
+                Blogs
+                <div class="sb-sidenav-collapse-arrow">
+                  <i class="fas fa-angle-down"></i>
+                </div>
+              </a>
+              <div
+                class="collapse"
+                id="collapseLayouts"
+                aria-labelledby="headingOne"
+                data-bs-parent="#sidenavAccordion"
+              >
+                <nav class="sb-sidenav-menu-nested nav">
+                  <a class="nav-link" href="/add-blog">Add Blog</a>
+                  <a class="nav-link" href="/all-blogs">All Blogs</a>
+                </nav>
+              </div>
+              <a
+                class="nav-link collapsed"
+                href="#"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapsePages"
+                aria-expanded="false"
+                aria-controls="collapsePages"
+              >
+                <div class="sb-nav-link-icon">
+                  <i class="fas fa-book-open"></i>
+                </div>
+                Pages
+                <div class="sb-sidenav-collapse-arrow">
+                  <i class="fas fa-angle-down"></i>
+                </div>
+              </a>
+              <div
+                class="collapse"
+                id="collapsePages"
+                aria-labelledby="headingTwo"
+                data-bs-parent="#sidenavAccordion"
+              >
+                <nav
+                  class="sb-sidenav-menu-nested nav accordion"
+                  id="sidenavAccordionPages"
+                >
+                  <a
+                    class="nav-link collapsed"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#pagesCollapseAuth"
+                    aria-expanded="false"
+                    aria-controls="pagesCollapseAuth"
+                  >
+                    Authentication
+                    <div class="sb-sidenav-collapse-arrow">
+                      <i class="fas fa-angle-down"></i>
+                    </div>
+                  </a>
+                  <div
+                    class="collapse"
+                    id="pagesCollapseAuth"
+                    aria-labelledby="headingOne"
+                    data-bs-parent="#sidenavAccordionPages"
+                  >
+                    <nav class="sb-sidenav-menu-nested nav">
+                      <a class="nav-link" href="login.html">Login</a>
+                      <a class="nav-link" href="register.html">Register</a>
+                      <a class="nav-link" href="password.html"
+                        >Forgot Password</a
+                      >
+                    </nav>
+                  </div>
+                  <a
+                    class="nav-link collapsed"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#pagesCollapseError"
+                    aria-expanded="false"
+                    aria-controls="pagesCollapseError"
+                  >
+                    Error
+                    <div class="sb-sidenav-collapse-arrow">
+                      <i class="fas fa-angle-down"></i>
+                    </div>
+                  </a>
+                  <div
+                    class="collapse"
+                    id="pagesCollapseError"
+                    aria-labelledby="headingOne"
+                    data-bs-parent="#sidenavAccordionPages"
+                  >
+                    <nav class="sb-sidenav-menu-nested nav">
+                      <a class="nav-link" href="401.html">401 Page</a>
+                      <a class="nav-link" href="404.html">404 Page</a>
+                      <a class="nav-link" href="500.html">500 Page</a>
+                    </nav>
+                  </div>
+                </nav>
+              </div>
+              <!-- <div class="sb-sidenav-menu-heading">Addons</div>
+                            <a class="nav-link" href="charts.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Charts
+                            </a>
+                            <a class="nav-link" href="tables.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Tables
+                            </a> -->
+            </div>
+          </div>
+          <div class="sb-sidenav-footer">
+            <div class="small">Logged in as:</div>
+            Amit
+          </div>
+        </nav>
+      </div>
+      <div id="layoutSidenav_content">
+        <main>
+          <div class="container mt-5">
+            <h1 class="mb-4">All Blogs</h1>
+            <div id="blogsList" class="d-flex flex-wrap"></div>
+          </div>
+
+          <!-- Modal for editing blog -->
+          <div
+            class="modal fade"
+            id="editBlogModal"
+            tabindex="-1"
+            aria-labelledby="editBlogModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editBlogModalLabel">Edit Blog</h5>
+                  
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <span id="updateSuccessMessage" class="alert" role="alert"></span>
+                  <form id="editBlogForm">
+                    <input type="hidden" id="editBlogId" name="id" />
+                    <div class="mb-3">
+                      <label for="editTitle" class="form-label">Title</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="editTitle"
+                        name="title"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="editContent" class="form-label"
+                        >Content</label
+                      >
+                      <textarea
+                        class="form-control"
+                        id="editContent"
+                        name="content"
+                        rows="5"
+                      ></textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label for="editImage" class="form-label">Image</label>
+                      <input
+                        type="file"
+                        class="form-control"
+                        id="editImage"
+                        name="image"
+                        accept="image/*"
+                      />
+                      <img
+                        id="imagePreview"
+                        src=""
+                        alt="Image Preview"
+                        style="
+                          max-width: 100%;
+                          height: auto;
+                          margin-top: 10px;
+                          display: block;
+                        "
+                      />
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                      Save Changes
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+          <div class="container-fluid px-4">
+            <div
+              class="d-flex align-items-center justify-content-between small"
+            >
+              <div class="text-muted">Copyright &copy; Your Website 2023</div>
+              <div>
+                <a href="#">Privacy Policy</a>
+                &middot;
+                <a href="#">Terms &amp; Conditions</a>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <script>
+      // Fetch blogs from API and display them
+      async function fetchAndDisplayBlogs() {
+        try {
+          const response = await fetch("/api/blogs");
+          const blogs = await response.json();
+          console.log(blogs);
+          const blogsListContainer = document.getElementById("blogsList");
+
+          // Clear previous content
+          blogsListContainer.innerHTML = "";
+
+          // Display each blog
+          blogs.forEach((blog) => {
+            const blogCard = document.createElement("div");
+            blogCard.className = "card mb-3 blog-card"; // Updated class name
+            console.log(blog._id);
+            const blogCardBody = document.createElement("div");
+            blogCardBody.className = "blog-content"; // Updated class name
+
+            const blogTitle = document.createElement("h5");
+            blogTitle.className = "card-title blog-title"; // Updated class name
+            blogTitle.textContent = blog.title;
+
+            const blogImage = document.createElement("img");
+            blogImage.className = "card-img-top blog-image";
+            blogImage.src = blog.imageUrl;
+            blogImage.alt = blog.title;
+
+            const blogContent = document.createElement("p");
+            blogContent.className = "card-text blog-text"; // Updated class name
+            blogContent.textContent = blog.content;
+
+            const editButton = document.createElement("button");
+            editButton.className = "btn btn-primary btn-edit"; // Updated class name
+            editButton.textContent = "Edit";
+            editButton.onclick = () => openEditBlogModal(blog);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "btn btn-danger btn-delete"; // Updated class name
+            deleteButton.textContent = "Delete";
+            deleteButton.onclick = () => deleteBlog(blog._id);
+
+            blogCardBody.appendChild(blogTitle);
+            blogCardBody.appendChild(blogImage);
+            blogCardBody.appendChild(blogContent);
+            blogCardBody.appendChild(editButton);
+            blogCardBody.appendChild(deleteButton);
+            blogCard.appendChild(blogCardBody);
+
+            blogsListContainer.appendChild(blogCard);
+          });
+        } catch (error) {
+          console.error("Error fetching blogs:", error.message);
+        }
+      }
+
+      // Open edit blog modal and fill in the form with blog data
+      function openEditBlogModal(blog) {
+        const editBlogModal = new bootstrap.Modal(
+          document.getElementById("editBlogModal")
+        );
+        document.getElementById("editBlogId").value = blog._id;
+        document.getElementById("editTitle").value = blog.title;
+        document.getElementById("editContent").value = blog.content;
+        // Set the current blog image URL as the src attribute of imagePreview
+        const imagePreview = document.getElementById("imagePreview");
+        imagePreview.src = blog.imageUrl;
+        document.getElementById("editImage").value = ""; // Clear the file input
+        editBlogModal.show();
+      }
+
+      // Function to handle changes in the file input field
+      document
+        .getElementById("editImage")
+        .addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          const reader = new FileReader();
+
+          reader.onload = function () {
+            const imagePreview = document.getElementById("imagePreview");
+            imagePreview.src = reader.result;
+            imagePreview.style.display = "block"; // Ensure the preview is displayed
+          };
+
+          reader.readAsDataURL(file);
+        });
+
+      document
+        .getElementById("editBlogForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          // Get form input values
+          const id = document.getElementById("editBlogId").value;
+          const title = document.getElementById("editTitle").value;
+          const content = document.getElementById("editContent").value;
+
+          // Get the file input element
+          const fileInput = document.getElementById("editImage");
+
+          // Create FormData object
+          const formData = new FormData();
+          formData.append("id", id);
+          formData.append("title", title);
+          formData.append("content", content);
+
+          // Check if a file has been selected
+          if (fileInput.files.length > 0) {
+            // Get the file data and append it to FormData
+            const file = fileInput.files[0];
+            formData.append("image", file);
+          }
+
+          try {
+            const response = await fetch("/api/blogs/" + id, {
+              method: "PUT",
+              body: formData, // Pass FormData object
+            });
+
+            if (!response.ok) {
+              throw new Error("Failed to update blog");
+            }
+
+            // Show success message
+            const successMessage = document.getElementById(
+              "updateSuccessMessage"
+            );
+            successMessage.innerText = "Blog updated successfully.";
+
+            // Close modal after a brief delay
+            setTimeout(() => {
+              new bootstrap.Modal(
+                document.getElementById("editBlogModal")
+              ).hide();
+              successMessage.innerText = ""; // Clear the message after hiding the modal
+              fetchAndDisplayBlogs(); // Refresh blogs list
+            }, 2000); // Adjust the delay as needed (in milliseconds)
+          } catch (error) {
+            console.error("Error updating blog:", error.message);
+          }
+        });
+
+      // Function to delete a blog
+      async function deleteBlog(blogId) {
+        console.log(blogId);
+        if (confirm("Are you sure you want to delete this blog?")) {
+          try {
+            const response = await fetch(`/api/blogs/${blogId}`, {
+              method: "DELETE",
+            });
+
+            if (!response.ok) {
+              throw new Error("Failed to delete blog");
+            }
+
+            // Refresh blogs list
+            fetchAndDisplayBlogs();
+          } catch (error) {
+            console.error("Error deleting blog:", error.message);
+          }
+        }
+      }
+
+      // Call fetchAndDisplayBlogs when the page loads
+      document.addEventListener("DOMContentLoaded", fetchAndDisplayBlogs);
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="../dist/assets/js/datatables-simple-demo.js"></script>
+  </body>
+</html>
